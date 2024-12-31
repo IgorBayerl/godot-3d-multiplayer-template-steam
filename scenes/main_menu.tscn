@@ -79,7 +79,3 @@ offset_bottom = 157.0
 theme = ExtResource("2_b784e")
 text = "Join Game"
 flat = true
-
-[connection signal="pressed" from="Menu/Exit" to="." method="exit_game"]
-[connection signal="pressed" from="Menu/HostGame" to="." method="host_game"]
-[connection signal="pressed" from="Menu/JoinGame" to="." method="join_game"]

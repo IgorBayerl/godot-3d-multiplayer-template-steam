@@ -30,6 +30,10 @@ NetworkPerformance="*res://addons/netfox/network-performance.gd"
 
 window/size/always_on_top=true
 
+[dotnet]
+
+project/assembly_name="godot-3d-multiplayer-template-1"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/netfox.extras/plugin.cfg", "res://addons/netfox.internals/plugin.cfg", "res://addons/netfox/plugin.cfg")
