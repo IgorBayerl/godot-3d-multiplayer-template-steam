@@ -19,6 +19,7 @@ config/icon="res://bad_icon.png"
 [autoload]
 
 NetworkManager="*res://scripts/network/network_manager.gd"
+SteamManager="*res://scripts/steam/steam_manager.gd"
 WindowTiler="*res://addons/netfox.extras/window-tiler.gd"
 NetworkTime="*res://addons/netfox/network-time.gd"
 NetworkTimeSynchronizer="*res://addons/netfox/network-time-synchronizer.gd"
