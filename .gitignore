@@ -2,3 +2,4 @@
 .godot/
 dependencies/*.exe
 dependencies/GodotSharp
+exports/
