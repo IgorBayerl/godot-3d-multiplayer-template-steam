@@ -1,5 +1,6 @@
 extends Node
 # Autoload
+signal network_changed #This can be used to hide Steam specific UI for example
 
 enum MULTIPLAYER_NETWORK_TYPE { ENET, STEAM }
 var active_network_type: MULTIPLAYER_NETWORK_TYPE = MULTIPLAYER_NETWORK_TYPE.ENET
@@ -22,13 +23,12 @@ func host_game():
 	is_hosting_game = true
 	active_network.host_server()
 
-func join_game():
+func join_game(lobby_id: int):
 	print("Join game")
 	_build_multiplayer_network()
 	show_loading()
-	var TODO_lobby_id = 0
-	active_network.join_server(TODO_lobby_id)
-	
+	active_network.join_server(lobby_id)
+
 func show_loading():
 	print("Show loading")
 	_active_loading_scene = _loading_scene.instantiate()
@@ -63,6 +63,16 @@ func _set_active_network(active_network_scene):
 	# The network manager is a scene added to the project tree
 	add_child(active_network)
 	
-#TODO: Can be called from anywhere, for example in the menu to toggle between steam and ENet
-func set_network():
-	pass
+func set_network(target_network: MULTIPLAYER_NETWORK_TYPE):
+	if(target_network == active_network_type):
+		return
+	active_network_type = target_network
+	_build_multiplayer_network()
+	emit_signal("network_changed")
+
+func get_active_network_type_string() -> String:
+	if( active_network_type == MULTIPLAYER_NETWORK_TYPE.ENET):
+		return "ENet"
+	if( active_network_type == MULTIPLAYER_NETWORK_TYPE.STEAM):
+		return "Steam"
+	return "Undefined"

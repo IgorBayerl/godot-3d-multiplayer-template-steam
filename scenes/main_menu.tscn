@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://ffncciksi1tw"]
+[gd_scene load_steps=6 format=3 uid="uid://ffncciksi1tw"]
 
 [ext_resource type="Texture2D" uid="uid://c8egr8gfrmslx" path="res://asssets/ui/menu-bg.jpeg" id="1_va0jy"]
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_wcff0"]
 [ext_resource type="Theme" uid="uid://e1no5yb08xdc" path="res://asssets/ui/menu_theme.tres" id="2_b784e"]
+[ext_resource type="PackedScene" uid="uid://ctrpcugl5crl" path="res://scenes/components/network_type_indicator/netowork_type_indicator.tscn" id="3_2yf0r"]
 [ext_resource type="FontFile" uid="uid://f7a8vjj11u4c" path="res://asssets/ui/SuperNormal-xRoj5.ttf" id="4_mmjro"]
 
 [node name="MainMenu" type="Control"]
@@ -42,6 +43,9 @@ offset_top = 1.0
 offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="NetoworkTypeIndicator" parent="Menu" instance=ExtResource("3_2yf0r")]
+layout_mode = 1
 
 [node name="Exit" type="Button" parent="Menu"]
 layout_mode = 1
@@ -88,13 +92,14 @@ offset_bottom = 161.0
 theme_override_fonts/font = ExtResource("4_mmjro")
 text = "ListLobbies"
 
-[node name="UseSteam" type="Button" parent="Menu"]
+[node name="SwitchNetwork" type="Button" parent="Menu"]
+unique_name_in_owner = true
 layout_mode = 0
-offset_left = 861.0
-offset_top = 117.0
-offset_right = 951.0
-offset_bottom = 148.0
-text = "Use Steam"
+offset_left = 600.0
+offset_top = 4.0
+offset_right = 795.0
+offset_bottom = 35.0
+text = "Switch Networking Type"
 
 [node name="Lobbies" type="ScrollContainer" parent="Menu"]
 layout_mode = 1
