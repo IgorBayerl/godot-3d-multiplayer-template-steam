@@ -48,6 +48,7 @@ grow_vertical = 2
 layout_mode = 1
 
 [node name="Exit" type="Button" parent="Menu"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -63,6 +64,7 @@ text = "Exit"
 flat = true
 
 [node name="HostGame" type="Button" parent="Menu"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 offset_left = 59.0
@@ -74,6 +76,7 @@ text = "Host Game"
 flat = true
 
 [node name="JoinGame" type="Button" parent="Menu"]
+unique_name_in_owner = true
 layout_mode = 2
 offset_left = 59.0
 offset_top = 106.0
@@ -83,33 +86,37 @@ theme = ExtResource("2_b784e")
 text = "Join Game"
 flat = true
 
-[node name="ListLobbies" type="Button" parent="Menu"]
+[node name="RefreshLobbies" type="Button" parent="Menu"]
+unique_name_in_owner = true
 layout_mode = 0
-offset_left = 971.0
-offset_top = 124.0
-offset_right = 1082.0
-offset_bottom = 161.0
+offset_left = 936.0
+offset_top = 131.0
+offset_right = 1087.0
+offset_bottom = 168.0
 theme_override_fonts/font = ExtResource("4_mmjro")
-text = "ListLobbies"
+text = "Refresh Lobby list"
 
 [node name="SwitchNetwork" type="Button" parent="Menu"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 600.0
-offset_top = 4.0
-offset_right = 795.0
-offset_bottom = 35.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -195.0
+offset_bottom = 31.0
+grow_horizontal = 0
 text = "Switch Networking Type"
 
 [node name="Lobbies" type="ScrollContainer" parent="Menu"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 81.0
+offset_left = 73.0
 offset_top = 177.0
-offset_right = -103.0
-offset_bottom = -57.0
+offset_right = -66.0
+offset_bottom = -47.0
 grow_horizontal = 2
 grow_vertical = 2
 

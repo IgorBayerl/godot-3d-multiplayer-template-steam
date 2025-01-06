@@ -50,17 +50,15 @@ func _create_host_peer():
 	steam_network_peer.clear_all_configs()
 	var error = steam_network_peer.create_host(SERVER_PORT)
 	
-	if error == OK:
-		multiplayer.set_multiplayer_peer(steam_network_peer)
-		
-		if not OS.has_feature("dedicated_server"):
-			_add_player_to_game(1)
-	else:
+	if error != OK:
 		print("error creating host: %s" % str(error))
+		return
+	multiplayer.set_multiplayer_peer(steam_network_peer)
 
 func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, response: int):
 	print(">>> On lobby joined")
 	Steam.lobby_joined.disconnect(_on_lobby_joined)
+	SignalBus.lobby_joined.emit(lobby_id)
 	
 	if response != 1:
 		# Get the failure reason
@@ -94,7 +92,3 @@ func connect_socket(steam_id: int):
 		
 	print("Connecting peer to host...")
 	multiplayer.set_multiplayer_peer(steam_network_peer)
-
-func _add_player_to_game(id: int):
-	print("Player %s joined the game!" % id)
-#	TODO implement this shit

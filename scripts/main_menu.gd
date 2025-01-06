@@ -2,8 +2,8 @@ extends Control
 
 const GAME_SCENE = "res://scenes/game.tscn"
 
-@onready var lobbies: ScrollContainer = $Menu/Lobbies
-@onready var list_lobbies: Button = $Menu/ListLobbies
+@onready var lobbies: ScrollContainer = %Lobbies
+@onready var refresh_lobbies: Button = %RefreshLobbies
 @onready var switch_network_button: Button = %SwitchNetwork
 
 const LOBBY_NAME = "BAD"
@@ -12,7 +12,6 @@ const LOBBY_MODE = "CoOP"
 
 func _ready():
 	print("Main menu ready...")
-	
 	# Check for dedicated server and host game automatically
 	if OS.has_feature("dedicated_server"):
 		print("Calling host game...")
@@ -20,17 +19,17 @@ func _ready():
 		get_tree().call_deferred("change_scene_to_packed", preload(GAME_SCENE))
 	
 	# Connect signals for buttons
-	$Menu/Exit.pressed.connect(_on_exit_pressed)
-	$Menu/HostGame.pressed.connect(_on_host_game_pressed)
-	$Menu/JoinGame.pressed.connect(_on_join_game_pressed)
+	%Exit.pressed.connect(_on_exit_pressed)
+	%HostGame.pressed.connect(_on_host_game_pressed)
+	%JoinGame.pressed.connect(_on_join_game_pressed)
 	switch_network_button.pressed.connect(_on_switch_network_pressed)
 	switch_network_button.text = "Use Steam"
 	
-	list_lobbies.pressed.connect(_on_list_lobbies_pressed)
+	refresh_lobbies.pressed.connect(_on_refresh_lobbies_pressed)
 
-	NetworkManager.connect("network_changed",_on_network_changed)
+	NetworkManager.network_changed.connect(_on_network_changed)
 
-	list_lobbies.hide()
+	refresh_lobbies.hide()
 	lobbies.hide()
 
 # Callback for the Exit button
@@ -39,33 +38,30 @@ func _on_exit_pressed():
 
 # Callback for the Host Game button
 func _on_host_game_pressed():
-	print("Host game pressed")
 	NetworkManager.host_game()
 	get_tree().call_deferred("change_scene_to_packed", preload(GAME_SCENE))
 
 # Callback for the Join Game button
 func _on_join_game_pressed():
-	print("Join game pressed")
 	handle_join_lobby()
 	
-func _on_list_lobbies_pressed():
-	print("List Lobbies pressed")
+func _on_refresh_lobbies_pressed():
 	req_steam_list_lobbies()
 
 func _on_network_changed() -> void:
 	# Steam
 	if(NetworkManager.active_network_type == NetworkManager.MULTIPLAYER_NETWORK_TYPE.STEAM):
-		print(">>>>>>>>>>>>>>")
 		SteamManager.initialize_steam()
 		lobbies.show()
-		list_lobbies.show()
+		refresh_lobbies.show()
 		Steam.lobby_match_list.connect(_on_lobby_match_list)
 		switch_network_button.text = "Use ENet"
+		req_steam_list_lobbies()
 		return
 	#ENet
 	if(NetworkManager.active_network_type == NetworkManager.MULTIPLAYER_NETWORK_TYPE.ENET):
 		lobbies.hide()
-		list_lobbies.hide()
+		refresh_lobbies.hide()
 		Steam.lobby_match_list.disconnect(_on_lobby_match_list)
 		switch_network_button.text = "Use Steam"
 		return
@@ -89,9 +85,10 @@ func _on_lobby_match_list(lobbies_list: Array):
 		
 		if lobby_name != "":
 			var lobby_mode: String = Steam.getLobbyData(lobby, "mode")
+			var num_of_members: int = Steam.getNumLobbyMembers(lobby)
 			
 			var lobby_button: Button = Button.new()
-			lobby_button.set_text(lobby_name + " | " + lobby_mode)
+			lobby_button.set_text(str(num_of_members) + " | " + lobby_name + " | " + lobby_mode)
 			lobby_button.set_size(Vector2(100, 30))
 			lobby_button.add_theme_font_size_override("font_size", 13)
 			
@@ -105,11 +102,15 @@ func _on_lobby_match_list(lobbies_list: Array):
 			$"Menu/Lobbies/VBoxContainer".add_child(lobby_button)
 
 func handle_join_lobby(lobby_id: int = 0):
+	print(">>> Join lobby %s" % lobby_id)
+	SignalBus.lobby_joined.connect(_on_joined_lobby)
 	NetworkManager.join_game(lobby_id)
+	
+func _on_joined_lobby(lobby_id: int):
+	SignalBus.lobby_joined.disconnect(_on_joined_lobby)
 	get_lobby_members(lobby_id)
 	# TODO: after joining the lobby, we want to get the information of the other people in the same lobby and display somewhere
-	#get_tree().call_deferred("change_scene_to_packed", preload(GAME_SCENE))
-	print(">>> Join lobby %s" % lobby_id)
+	get_tree().call_deferred("change_scene_to_packed", preload(GAME_SCENE))
 
 func req_steam_list_lobbies():
 	Steam.addRequestLobbyListDistanceFilter(Steam.LOBBY_DISTANCE_FILTER_WORLDWIDE)
@@ -138,8 +139,9 @@ var lobby_vote_kick: bool = false
 var steam_id: int = 0
 var steam_username: String = ""
 
-	
+
 func get_lobby_members(lobby_id: int) -> void:
+	print("Geting lobby members...")
 	# Clear your previous lobby list
 	lobby_members.clear()
 
@@ -150,11 +152,12 @@ func get_lobby_members(lobby_id: int) -> void:
 	for this_member in range(0, num_of_members):
 		# Get the member's Steam ID
 		var member_steam_id: int = Steam.getLobbyMemberByIndex(lobby_id, this_member)
-		if member_steam_id == 0:
-			continue
+		#if member_steam_id == 0:
+			#continue
 		# Get the member's Steam name
 		var member_steam_name: String = Steam.getFriendPersonaName(member_steam_id)
+		print("here %s" % member_steam_name)
 
 		# Add them to the list
 		lobby_members.append({"steam_id":member_steam_id, "steam_name":member_steam_name})
-		print(">>> LOBBY MEMBERS --> %s" % lobby_members)
+	print(">>> LOBBY MEMBERS --> %s" % lobby_members)
