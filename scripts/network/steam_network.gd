@@ -4,7 +4,7 @@ const SERVER_PORT = 8080
 
 var steam_network_peer: SteamMultiplayerPeer = SteamMultiplayerPeer.new()
 
-var _players_spawn_node
+#var _players_spawn_node
 var _hosted_lobby_id: int = 0
 
 const LOBBY_NAME = "BAD"
@@ -33,9 +33,9 @@ func _handle_player_connected(id: int):
 func _handle_player_disconnected(id: int):
 	print("handle player disconnected callback : %s" % id )
 
-func _on_lobby_created(connect: int, lobby_id):
+func _on_lobby_created(connect_id: int, lobby_id):
 	print("On lobby created")
-	if connect == 1:
+	if connect_id == 1:
 		_hosted_lobby_id = lobby_id
 		print("Created lobby: %s" % _hosted_lobby_id)
 		
@@ -57,7 +57,7 @@ func _create_host_peer():
 	else:
 		print("error creating host: %s" % str(error))
 
-func _on_lobby_joined(lobby_id: int, permissions: int, locked: bool, response: int):
+func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, response: int):
 	print(">>> On lobby joined")
 	
 	if response != 1:
@@ -85,11 +85,12 @@ func _on_lobby_joined(lobby_id: int, permissions: int, locked: bool, response: i
 		
 func connect_socket(steam_id: int):
 	var error = steam_network_peer.create_client(steam_id, SERVER_PORT)
-	if error == OK:
-		print("Connecting peer to host...")
-		multiplayer.set_multiplayer_peer(steam_network_peer)
-	else:
+	if error != OK:
 		print("Error creating client: %s" % str(error))
+		return
+		
+	print("Connecting peer to host...")
+	multiplayer.set_multiplayer_peer(steam_network_peer)
 
 func _add_player_to_game(id: int):
 	print("Player %s joined the game!" % id)

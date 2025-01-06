@@ -3,8 +3,6 @@ extends Node
 const SERVER_PORT = 8080
 const SERVER_IP = "127.0.0.1"
 
-signal connection_failed_signal  # We'll emit this to your UI/NetworkManager
-
 var enet_network_peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 
 # Old create_server_peer

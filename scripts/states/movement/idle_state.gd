@@ -1,6 +1,6 @@
 extends MovementState
 
-func tick(delta, tick, is_fresh):
+func tick(delta, _tick, _is_fresh):
 	rotate_player_model(delta)
 	move_player(delta)
 	

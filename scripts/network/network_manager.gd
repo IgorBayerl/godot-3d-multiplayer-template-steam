@@ -68,7 +68,7 @@ func set_network(target_network: MULTIPLAYER_NETWORK_TYPE):
 		return
 	active_network_type = target_network
 	_build_multiplayer_network()
-	emit_signal("network_changed")
+	network_changed.emit()
 
 func get_active_network_type_string() -> String:
 	if( active_network_type == MULTIPLAYER_NETWORK_TYPE.ENET):

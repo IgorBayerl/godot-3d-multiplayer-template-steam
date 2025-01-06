@@ -1,9 +1,9 @@
 extends MovementState
 
-func enter(previous_state: RewindableState, tick: int) -> void:
+func enter(_previous_state: RewindableState, _tick: int) -> void:
 	parent.velocity.y = JUMP_VELOCITY
 
-func tick(delta, tick, is_fresh):
+func tick(delta, _tick, _is_fresh):
 	rotate_player_model(delta)
 	move_player(delta)
 	
@@ -12,7 +12,7 @@ func tick(delta, tick, is_fresh):
 		state_machine.transition(&"FallState")
 	# If issues arise around jump, add additional state transitions here
 
-func move_player(delta: float, speed = WALK_SPEED):
+func move_player(_delta: float, speed = WALK_SPEED):
 	var input_dir : Vector2 = get_movement_input()
 	
 	# Based on https://github.com/godotengine/godot-demo-projects/blob/4.2-31d1c0c/3d/platformer/player/player.gd#L65

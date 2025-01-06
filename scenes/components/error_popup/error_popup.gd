@@ -30,5 +30,5 @@ func _ready() -> void:
 		message_label.text = error_message
 
 func _on_ok_button_pressed() -> void:
-	emit_signal("popup_closed")  # Notify anyone who's waiting
+	popup_closed.emit()  # Notify anyone who's waiting
 	queue_free()                 # Remove the popup from the scene

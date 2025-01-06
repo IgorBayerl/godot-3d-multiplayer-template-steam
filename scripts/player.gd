@@ -31,12 +31,12 @@ func _ready():
 	# https://foxssake.github.io/netfox/netfox/tutorials/responsive-player-movement/#ownership
 	rollback_synchronizer.process_settings()
 
-func _rollback_tick(delta: float, tick: int, is_fresh: bool) -> void:
+func _rollback_tick(delta: float, _tick: int, _is_fresh: bool) -> void:
 	_force_update_is_on_floor()
 	if not is_on_floor():
 		apply_gravity(delta)
 
-func _on_display_state_changed(old_state, new_state):
+func _on_display_state_changed(_old_state, new_state):
 	# print("Old state %s, new %s" % [old_state, new_state])
 	
 	var animation_name = new_state.animation_name

@@ -16,7 +16,7 @@ const JUMP_MOVE_SPEED := 3.0
 @export var parent: Player
 
 # Default movement, override as needed
-func move_player(delta: float, speed: float = WALK_SPEED):
+func move_player(_delta: float, _speed: float = WALK_SPEED):
 	parent.velocity *= NetworkTime.physics_factor
 	parent.move_and_slide()
 	parent.velocity /= NetworkTime.physics_factor

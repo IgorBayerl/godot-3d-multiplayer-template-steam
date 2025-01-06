@@ -9,6 +9,7 @@ const GAME_SCENE = "res://scenes/game.tscn"
 const LOBBY_NAME = "BAD"
 const LOBBY_MODE = "CoOP"
 
+
 func _ready():
 	print("Main menu ready...")
 	
@@ -78,14 +79,12 @@ func _on_switch_network_pressed():
 		return
 	
 #TODO Move this to a steam related class instead of main menu
-func _on_lobby_match_list(lobbies: Array):
-	print("On lobby match list \n %s" % lobbies)
-	
+func _on_lobby_match_list(lobbies_list: Array):
 	# Clear the current list of lobbies
 	for lobby_child in $"Menu/Lobbies/VBoxContainer".get_children():
 		lobby_child.queue_free()
 		
-	for lobby in lobbies:
+	for lobby in lobbies_list:
 		var lobby_name: String = Steam.getLobbyData(lobby, "name")
 		
 		if lobby_name != "":
@@ -107,8 +106,9 @@ func _on_lobby_match_list(lobbies: Array):
 
 func handle_join_lobby(lobby_id: int = 0):
 	NetworkManager.join_game(lobby_id)
+	get_lobby_members(lobby_id)
 	# TODO: after joining the lobby, we want to get the information of the other people in the same lobby and display somewhere
-	get_tree().call_deferred("change_scene_to_packed", preload(GAME_SCENE))
+	#get_tree().call_deferred("change_scene_to_packed", preload(GAME_SCENE))
 	print(">>> Join lobby %s" % lobby_id)
 
 func req_steam_list_lobbies():
@@ -123,5 +123,38 @@ func req_steam_list_lobbies():
 # Where you automatically create a lobby when entering the menu.
 # And anyone that is in the game can join it automatically
 # So here i want to list everyone that is in the menu and consequentially with a lobby created
-func list_friends_with_the_game(lobbies: Array):
+func list_friends_with_the_game(_lobbies: Array):
 	pass
+	
+	
+
+const PACKET_READ_LIMIT: int = 32
+
+var lobby_data
+#var lobby_id: int = 0
+var lobby_members: Array = []
+var lobby_members_max: int = 10
+var lobby_vote_kick: bool = false
+var steam_id: int = 0
+var steam_username: String = ""
+
+	
+func get_lobby_members(lobby_id: int) -> void:
+	# Clear your previous lobby list
+	lobby_members.clear()
+
+	# Get the number of members from this lobby from Steam
+	var num_of_members: int = Steam.getNumLobbyMembers(lobby_id)
+
+	# Get the data of these players from Steam
+	for this_member in range(0, num_of_members):
+		# Get the member's Steam ID
+		var member_steam_id: int = Steam.getLobbyMemberByIndex(lobby_id, this_member)
+		if member_steam_id == 0:
+			continue
+		# Get the member's Steam name
+		var member_steam_name: String = Steam.getFriendPersonaName(member_steam_id)
+
+		# Add them to the list
+		lobby_members.append({"steam_id":member_steam_id, "steam_name":member_steam_name})
+		print(">>> LOBBY MEMBERS --> %s" % lobby_members)
