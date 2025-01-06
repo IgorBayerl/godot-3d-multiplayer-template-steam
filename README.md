@@ -1,4 +1,4 @@
-# Godot 3D Multiplayer Template
+# Godot 3D Multiplayer Template with Steam
 A very basic multiplayer template set in a 3D world. Use this as a starting point for your game or a quick way to prototype functionality.
 
 - Synchronizes player movement and animations: Idle, Walk/Run, Jump, and Fall 

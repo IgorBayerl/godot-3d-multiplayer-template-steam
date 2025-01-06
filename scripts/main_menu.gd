@@ -46,7 +46,6 @@ func _on_host_game_pressed():
 func _on_join_game_pressed():
 	print("Join game pressed")
 	handle_join_lobby()
-	get_tree().call_deferred("change_scene_to_packed", preload(GAME_SCENE))
 	
 func _on_list_lobbies_pressed():
 	print("List Lobbies pressed")
@@ -108,6 +107,8 @@ func _on_lobby_match_list(lobbies: Array):
 
 func handle_join_lobby(lobby_id: int = 0):
 	NetworkManager.join_game(lobby_id)
+	# TODO: after joining the lobby, we want to get the information of the other people in the same lobby and display somewhere
+	get_tree().call_deferred("change_scene_to_packed", preload(GAME_SCENE))
 	print(">>> Join lobby %s" % lobby_id)
 
 func req_steam_list_lobbies():

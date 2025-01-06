@@ -14,5 +14,4 @@ func show_error(message: String, code: String = "", title: String = "Error"):
 	# Add it to the scene tree
 	get_tree().root.add_child(popup_instance)
 	
-	# Yield/await the popup's "popup_closed" signal:
 	return await popup_instance.popup_closed
