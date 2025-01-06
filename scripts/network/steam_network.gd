@@ -59,6 +59,7 @@ func _create_host_peer():
 
 func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, response: int):
 	print(">>> On lobby joined")
+	Steam.lobby_joined.disconnect(_on_lobby_joined)
 	
 	if response != 1:
 		# Get the failure reason
@@ -84,6 +85,7 @@ func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, response:
 		connect_socket(id)
 		
 func connect_socket(steam_id: int):
+	steam_network_peer.clear_all_configs()
 	var error = steam_network_peer.create_client(steam_id, SERVER_PORT)
 	if error != OK:
 		print("Error creating client: %s" % str(error))
