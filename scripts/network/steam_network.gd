@@ -47,6 +47,7 @@ func _on_lobby_created(connect_id: int, lobby_id):
 
 func _create_host_peer():
 	print("Create Host")
+	steam_network_peer.clear_all_configs()
 	var error = steam_network_peer.create_host(SERVER_PORT)
 	
 	if error == OK:
