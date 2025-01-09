@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3 uid="uid://b4ww1rpxqabjq"]
+
+[ext_resource type="Script" path="res://scenes/components/lobby_list/lobby_list.gd" id="1_12aqa"]
+[ext_resource type="Theme" uid="uid://e1no5yb08xdc" path="res://asssets/ui/menu_theme.tres" id="1_jrrrc"]
+[ext_resource type="PackedScene" uid="uid://ldpn8wxhq8lw" path="res://scenes/components/lobby_list/lobby_item.tscn" id="2_7a7p8"]
+
+[node name="LobbyList" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_jrrrc")
+script = ExtResource("1_12aqa")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HideFullServers" type="CheckBox" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Hide Full Lobbies"
+
+[node name="NameFilter" type="LineEdit" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Filter By Name"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LobbyList" type="VBoxContainer" parent="ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_jrrrc")
+
+[node name="LobbyItem" parent="ScrollContainer/LobbyList" instance=ExtResource("2_7a7p8")]
+layout_mode = 2
+
+[node name="LobbyItem2" parent="ScrollContainer/LobbyList" instance=ExtResource("2_7a7p8")]
+layout_mode = 2
+
+[node name="LobbyItem3" parent="ScrollContainer/LobbyList" instance=ExtResource("2_7a7p8")]
+layout_mode = 2
+
+[node name="LobbyItem4" parent="ScrollContainer/LobbyList" instance=ExtResource("2_7a7p8")]
+layout_mode = 2

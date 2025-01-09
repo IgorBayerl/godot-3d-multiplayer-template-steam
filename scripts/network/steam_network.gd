@@ -12,6 +12,11 @@ const LOBBY_MODE = "CoOP"
 
 func  _ready():
 	Steam.lobby_created.connect(_on_lobby_created)
+	Steam.lobby_joined.connect(_on_lobby_joined)
+	
+func _exit_tree() -> void:
+	Steam.lobby_created.disconnect(_on_lobby_created)
+	Steam.lobby_joined.disconnect(_on_lobby_joined)
 
 func host_server():
 	print("host_server Steam")
@@ -19,7 +24,6 @@ func host_server():
 	multiplayer.peer_connected.connect(_handle_player_connected)
 	multiplayer.peer_disconnected.connect(_handle_player_disconnected)
 	
-	Steam.lobby_joined.connect(_on_lobby_joined)
 	Steam.createLobby(Steam.LOBBY_TYPE_PUBLIC, SteamManager.lobby_max_members)
 
 func join_server(target_lobby_id: int):
@@ -34,7 +38,6 @@ func _handle_player_disconnected(id: int):
 	print("handle player disconnected callback : %s" % id )
 
 func _on_lobby_created(connect_id: int, lobby_id):
-	print("On lobby created")
 	if connect_id == 1:
 		_hosted_lobby_id = lobby_id
 		print("Created lobby: %s" % _hosted_lobby_id)
@@ -46,7 +49,6 @@ func _on_lobby_created(connect_id: int, lobby_id):
 		_create_host_peer()
 
 func _create_host_peer():
-	print("Create Host")
 	steam_network_peer.clear_all_configs()
 	var error = steam_network_peer.create_host(SERVER_PORT)
 	
@@ -56,8 +58,6 @@ func _create_host_peer():
 	multiplayer.set_multiplayer_peer(steam_network_peer)
 
 func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, response: int):
-	print(">>> On lobby joined")
-	Steam.lobby_joined.disconnect(_on_lobby_joined)
 	SignalBus.lobby_joined.emit(lobby_id)
 	
 	if response != 1:
