@@ -58,8 +58,6 @@ func _create_host_peer():
 	multiplayer.set_multiplayer_peer(steam_network_peer)
 
 func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, response: int):
-	SignalBus.lobby_joined.emit(lobby_id)
-	
 	if response != 1:
 		# Get the failure reason
 		var FAIL_REASON: String

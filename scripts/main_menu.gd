@@ -102,11 +102,7 @@ func _on_lobby_match_list(lobbies_list: Array):
 
 func handle_join_lobby(lobby_id: int = 0):
 	print(">>> Join lobby %s" % lobby_id)
-	SignalBus.lobby_joined.connect(_on_joined_lobby)
 	NetworkManager.join_game(lobby_id)
-	
-func _on_joined_lobby(lobby_id: int):
-	SignalBus.lobby_joined.disconnect(_on_joined_lobby)
 	get_tree().call_deferred("change_scene_to_packed", preload(GAME_SCENE))
 
 func req_steam_list_lobbies():
